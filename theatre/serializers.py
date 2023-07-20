@@ -10,12 +10,6 @@ from theatre.models import (
 )
 
 
-class PlaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Play
-        fields = ("id", "title", "description", "actors", "genres")
-
-
 class ActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actor
@@ -26,6 +20,25 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = ("id", "name")
+
+
+class PlaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Play
+        fields = ("id", "title", "description", "actors", "genres")
+
+
+class PlayListSerializer(PlaySerializer):
+    actors = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="full_name"
+    )
+    genres = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="name"
+    )
+
+    class Meta:
+        model = Play
+        fields = ("id", "title", "actors", "genres")
 
 
 class TheatreHallSerializer(serializers.ModelSerializer):

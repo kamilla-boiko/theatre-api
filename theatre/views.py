@@ -104,7 +104,9 @@ class ReservationViewSet(
     pagination_class = ReservationPagination
 
     def get_queryset(self):
-        return Reservation.objects.filter(user=self.request.user)
+        queryset = self.queryset
+
+        return queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):
         if self.action == "list":

@@ -12,6 +12,7 @@ from theatre.models import (
 from theatre.serializers import (
     PlaySerializer,
     PlayListSerializer,
+    PlayDetailSerializer,
     ActorSerializer,
     GenreSerializer,
     TheatreHallSerializer,
@@ -27,6 +28,9 @@ class PlayViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return PlayListSerializer
+
+        if self.action == "retrieve":
+            return PlayDetailSerializer
 
         return PlaySerializer
 

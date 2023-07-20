@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from django.db.models import F, Count
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
@@ -17,7 +19,6 @@ from theatre.models import (
     Reservation,
 )
 from theatre.permissions import IsAdminOrIfAuthenticatedReadOnly
-
 from theatre.serializers import (
     PlaySerializer,
     PlayListSerializer,
@@ -75,6 +76,26 @@ class PlayViewSet(viewsets.ModelViewSet):
             return PlayImageSerializer
 
         return PlaySerializer
+
+    @extend_schema(parameters=[
+        OpenApiParameter(
+            "title",
+            type=OpenApiTypes.STR,
+            description="Filter by play title (ex. ?title=hamlet)"
+        ),
+        OpenApiParameter(
+            "genres",
+            type={"type": "list", "items": {"type": "number"}},
+            description="Filter by genre id (ex. ?genres=1,3)"
+        ),
+        OpenApiParameter(
+            "actors",
+            type={"type": "list", "items": {"type": "number"}},
+            description="Filter by actor id (ex. ?actors=1,3)",
+        ),
+    ])
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     @action(
         methods=["POST"],
@@ -152,6 +173,24 @@ class PerformanceViewSet(viewsets.ModelViewSet):
             return PerformanceDetailSerializer
 
         return PerformanceSerializer
+
+    @extend_schema(parameters=[
+        OpenApiParameter(
+            "date",
+            type=OpenApiTypes.DATE,
+            description=(
+                    "Filter by datetime of Performance "
+                    "(ex. ?date=2023-07-20)"
+            )
+        ),
+        OpenApiParameter(
+            "play",
+            type=OpenApiTypes.INT,
+            description="Filter by play id (ex. ?play=2)"
+        ),
+    ])
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class ReservationPagination(PageNumberPagination):

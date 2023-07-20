@@ -21,6 +21,7 @@ from theatre.serializers import (
     PerformanceListSerializer,
     PerformanceDetailSerializer,
     ReservationSerializer,
+    ReservationListSerializer,
 )
 
 
@@ -85,5 +86,13 @@ class PerformanceViewSet(viewsets.ModelViewSet):
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
-    queryset = Reservation.objects.all()
+    queryset = Reservation.objects.prefetch_related(
+        "tickets__performance__play", "tickets__performance__theatre_hall"
+    )
     serializer_class = ReservationSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ReservationListSerializer
+
+        return ReservationSerializer

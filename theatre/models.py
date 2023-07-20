@@ -48,7 +48,6 @@ class TheatreHall(models.Model):
         return self.name
 
 
-
 class Performance(models.Model):
     play = models.ForeignKey(
         Play, on_delete=models.CASCADE, related_name="performances"

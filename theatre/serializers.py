@@ -107,10 +107,13 @@ class PerformanceListSerializer(PerformanceSerializer):
 class PerformanceDetailSerializer(PerformanceSerializer):
     play = PlayListSerializer(many=False, read_only=True)
     theatre_hall = TheatreHallSerializer(many=False, read_only=True)
+    taken_seats = TicketSeatsSerializer(
+        source="tickets", many=True, read_only=True
+    )
 
     class Meta:
         model = Performance
-        fields = ("id", "play", "theatre_hall", "show_time")
+        fields = ("id", "play", "theatre_hall", "show_time", "taken_seats")
 
 
 class ReservationSerializer(serializers.ModelSerializer):

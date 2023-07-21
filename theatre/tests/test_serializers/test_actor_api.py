@@ -72,7 +72,7 @@ class AdminActorApiTests(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_create_play(self):
+    def test_create_actor(self):
         payload = {
             "first_name": "Actor 1",
             "last_name": "Last 1"
@@ -83,3 +83,37 @@ class AdminActorApiTests(TestCase):
         actor = Actor.objects.get(id=res.data["id"])
         for key in payload.keys():
             self.assertEqual(payload[key], getattr(actor, key))
+
+    def test_update_actor(self):
+        actor = Actor.objects.create(first_name="Actor 1", last_name="Last 1")
+        payload = {
+            "first_name": "Actor 123",
+            "last_name": "Last 123"
+        }
+        url = detail_url(actor.id)
+        res = self.client.put(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        actor = Actor.objects.get(id=res.data["id"])
+        for key in payload.keys():
+            self.assertEqual(payload[key], getattr(actor, key))
+
+    def test_partial_update_actor(self):
+        actor = Actor.objects.create(first_name="Actor 1", last_name="Last 1")
+        payload = {
+            "first_name": "Actor 123",
+        }
+        url = detail_url(actor.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        actor = Actor.objects.get(id=res.data["id"])
+        for key in payload.keys():
+            self.assertEqual(payload[key], getattr(actor, key))
+
+    def test_delete_actor(self):
+        actor = Actor.objects.create(first_name="Actor 1", last_name="Last 1")
+        url = detail_url(actor.id)
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)

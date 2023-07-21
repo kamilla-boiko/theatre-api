@@ -6,6 +6,16 @@ data such as actors, genres, plays, performances, reservations, and tickets. The
 setup ensures that the application can run consistently across different environments 
 and can be easily deployed in production.
 
+## Features
+The API service provides the following features:
+
+* CRUD operations for actors, genres, plays, performances, reservations, and tickets.
+* User authentication and authorization using JWT (JSON Web Tokens).
+* Uploading and managing play images.
+* Seat validation based on the theatre hall's capacity when creating tickets.
+* Dockerized for easy deployment and scaling.
+
+
 ## Prerequisites
 
 Before running the Theatre API service in Docker, ensure you have the following installed on your machine:

@@ -73,6 +73,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
 
 class PerformanceListSerializer(PerformanceSerializer):
     play_title = serializers.CharField(source="play.title", read_only=True)
+    play_image = serializers.ImageField(source="play.image", read_only=True)
     theatre_hall_name = serializers.CharField(
         source="theatre_hall.name", read_only=True
     )
@@ -84,7 +85,7 @@ class PerformanceListSerializer(PerformanceSerializer):
     class Meta:
         model = Performance
         fields = (
-            "id", "play_title", "show_time", "theatre_hall_name",
+            "id", "play_title", "play_image", "show_time", "theatre_hall_name",
             "theatre_hall_capacity", "tickets_available"
         )
 
